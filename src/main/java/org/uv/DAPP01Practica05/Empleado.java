@@ -1,5 +1,5 @@
 package org.uv.DAPP01Practica05;
-
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,11 +9,11 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "empleados")
-public class Empleado {
+@Table(name = "empleado")
+public class Empleado implements Serializable {
     @Id
-    @GeneratedValue(generator = "empleados_clave_seq", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "empleados_clave_seq", sequenceName = "empleados_clave_seq",
+    @GeneratedValue(generator = "empleado_clave_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "empleado_clave_seq", sequenceName = "empleado_clave_seq",
             initialValue = 1, allocationSize= 1)
     @Column(name= "clave")
     private long clave;
@@ -58,6 +58,6 @@ public class Empleado {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
-        
+    
+    
 }
-

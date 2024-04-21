@@ -20,6 +20,11 @@ public class EmpleadosController {
     @Autowired
     private EmpleadoRepository repositoryEmpleado;
     
+    @GetMapping("/hola/")
+    public String sayHola() {
+        return "Hola mundo";
+    }
+    
     @GetMapping("/empleado/")
     public List<Empleado> list() {
         return repositoryEmpleado.findAll();
@@ -49,7 +54,7 @@ public class EmpleadosController {
             }
     }
 
-    @PostMapping("/empleado")
+    @PostMapping("/empleado/")
     public ResponseEntity<Empleado> post(@RequestBody Empleado empleado) {
         repositoryEmpleado.save(empleado);
         return ResponseEntity.ok(empleado); 
