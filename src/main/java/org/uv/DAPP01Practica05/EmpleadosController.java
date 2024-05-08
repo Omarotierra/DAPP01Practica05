@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +18,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 @RequestMapping("/api/v1")
 public class EmpleadosController {
-     
+     private final PasswordEncoder passwordEncoder;
+    
+    public EmpleadosController(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+    
     @Autowired
     private EmpleadoRepository repositoryEmpleado;
     
@@ -47,8 +54,10 @@ public class EmpleadosController {
                 empleado.setNombre(newEmpleadoData.getNombre());
                 empleado.setDireccion(newEmpleadoData.getDireccion());
                 empleado.setTelefono(newEmpleadoData.getTelefono());
+                empleado.setEmail(newEmpleadoData.getEmail());
+                empleado.setPassword(passwordEncoder.encode(newEmpleadoData.getPassword()));
                 repositoryEmpleado.save(empleado);
-                return ResponseEntity.ok().build();
+                return ResponseEntity.ok(empleado);
             } else {
                 return ResponseEntity.notFound().build();
             }
@@ -56,10 +65,11 @@ public class EmpleadosController {
 
     @PostMapping("/empleado/")
     public ResponseEntity<Empleado> post(@RequestBody Empleado empleado) {
+        empleado.setPassword(passwordEncoder.encode(empleado.getPassword()));
         repositoryEmpleado.save(empleado);
         return ResponseEntity.ok(empleado); 
     }
-
+    
     @DeleteMapping("/empleado/{id}")
     public ResponseEntity<Empleado> delete(@PathVariable Long id) {
         Optional<Empleado> optEmpleado = repositoryEmpleado.findById(id);
