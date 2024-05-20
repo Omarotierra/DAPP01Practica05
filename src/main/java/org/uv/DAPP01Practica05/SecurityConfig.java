@@ -19,13 +19,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+       // http.csrf().disable()
+          http.cors().and()
+            .csrf().disable()       
             .authorizeRequests()
-            .anyRequest().authenticated()
+                   .antMatchers("/api/v1/login").permitAll() 
+            .anyRequest()
+            .authenticated()
             .and()
             .httpBasic();
     }
-
+/*
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.cors().and()
+            .csrf().disable()
+            .authorizeRequests()
+            .antMatchers("/api/v1/login").permitAll()  // Permitir acceso sin autenticación a /login
+            .anyRequest().authenticated()
+            .and()
+            .httpBasic();
+        return http.build();
+    }
+  */  
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
