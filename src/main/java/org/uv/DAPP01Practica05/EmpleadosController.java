@@ -51,6 +51,20 @@ public class EmpleadosController {
     private boolean passwordMatches(String inputPassword, String storedPassword) {
         return passwordEncoder.matches(inputPassword, storedPassword);
     }
+    
+    @PostMapping("/register")
+    public ResponseEntity<Empleado> register(@RequestBody Empleado empleado) {
+        empleado.setPassword(passwordEncoder.encode(empleado.getPassword()));
+        repositoryEmpleado.save(empleado);
+        return ResponseEntity.ok(empleado); 
+    }
+    
+    @PostMapping("/empleado/")
+    public ResponseEntity<Empleado> post(@RequestBody Empleado empleado) {
+        empleado.setPassword(passwordEncoder.encode(empleado.getPassword()));
+        repositoryEmpleado.save(empleado);
+        return ResponseEntity.ok(empleado); 
+    }
 
     @GetMapping("/empleado/")
     public List<Empleado> list() {
@@ -81,13 +95,6 @@ public class EmpleadosController {
             } else {
                 return ResponseEntity.notFound().build();
             }
-    }
-
-    @PostMapping("/empleado/")
-    public ResponseEntity<Empleado> post(@RequestBody Empleado empleado) {
-        empleado.setPassword(passwordEncoder.encode(empleado.getPassword()));
-        repositoryEmpleado.save(empleado);
-        return ResponseEntity.ok(empleado); 
     }
     
     @DeleteMapping("/empleado/{id}")
